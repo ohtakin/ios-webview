@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var webViewModel = WebViewModel()
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack {
+            ZStack {
+                WebView(webViewModel: self.webViewModel)
+                    .ignoresSafeArea()
+            }
+        }
     }
 }
 
