@@ -30,6 +30,11 @@ struct WebView: UIViewRepresentable {
         webViewModel.webView.allowsBackForwardNavigationGestures = true
         webViewModel.webView.scrollView.isScrollEnabled = true
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(context.coordinator, action: #selector(Coordinator.handleRefresh), for: UIControl.Event.valueChanged)
+        webViewModel.webView.scrollView.addSubview(refreshControl)
+        webViewModel.webView.scrollView.bounces = true
+        
         if let url = URL(string: self.webViewModel.url) {
             webViewModel.webView.load(URLRequest(url: url))
         }
@@ -41,6 +46,7 @@ struct WebView: UIViewRepresentable {
     
     class Coordinator : NSObject, WKNavigationDelegate {
         var parent: WebView
+        var refreshcontrol: UIRefreshControl?
         
         init(_ uiWebView: WebView) {
             self.parent = uiWebView
@@ -61,15 +67,20 @@ struct WebView: UIViewRepresentable {
         }
         
         func webView(_ webview: WKWebView, didFinish: WKNavigation!) {
+            self.refreshcontrol?.endRefreshing()
         }
         
         func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
+            self.refreshcontrol?.endRefreshing()
         }
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            self.refreshcontrol?.endRefreshing()
         }
         
-        @objc func handleRefresh(sender: UIRefreshControl) {
+        @objc func handleRefresh(refreshcontrol: UIRefreshControl) {
+            self.parent.webViewModel.webView.reload()
+            self.refreshcontrol = refreshcontrol
         }
     }
 }
