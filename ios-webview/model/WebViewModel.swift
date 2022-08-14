@@ -17,6 +17,6 @@ class WebViewModel: ObservableObject {
     init(url: String = "", webView: WKWebView = WKWebView()) {
         self.url = Bundle.main.object(forInfoDictionaryKey: "hostUrl") as! String
         self.webView = webView
-        print("hostUrl: \(self.url)")
+        debugPrint("hostUrl: \(self.url)")
     }
 }

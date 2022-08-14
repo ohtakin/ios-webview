@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var webViewModel = WebViewModel()
+    @ObservedObject private var webViewModel = WebViewModel()
+    @ObservedObject private var alertViewModel = AlertViewModel()
     
     var body: some View {
         VStack {
             ZStack {
-                WebView(webViewModel: self.webViewModel)
+                WebView(webViewModel: self.webViewModel, alertViewModel: self.alertViewModel)
                     .ignoresSafeArea()
             }
+        }.alert(isPresented: $alertViewModel.isPresented) {
+            Alert(viewModel: self.alertViewModel)
         }
     }
 }

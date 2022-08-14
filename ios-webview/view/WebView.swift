@@ -13,38 +13,41 @@ import WebKit
 struct WebView: UIViewRepresentable {
     
     @ObservedObject var webViewModel: WebViewModel
+    @ObservedObject var alertViewModel: AlertViewModel
     
+    // MARK: - WebView
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
     
     func makeUIView(context: Context) -> WKWebView {
         let preferences = WKPreferences()
-        preferences.javaScriptCanOpenWindowsAutomatically = false
+        preferences.javaScriptCanOpenWindowsAutomatically = true
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences = preferences
 
-        webViewModel.webView = WKWebView(frame: CGRect.zero, configuration: configuration)
-        webViewModel.webView.navigationDelegate = context.coordinator
-        webViewModel.webView.allowsBackForwardNavigationGestures = true
-        webViewModel.webView.scrollView.isScrollEnabled = true
+        self.webViewModel.webView = WKWebView(frame: CGRect.zero, configuration: configuration)
+        self.webViewModel.webView.uiDelegate = context.coordinator
+        self.webViewModel.webView.navigationDelegate = context.coordinator
+        self.webViewModel.webView.allowsBackForwardNavigationGestures = true
+        self.webViewModel.webView.scrollView.isScrollEnabled = true
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(context.coordinator, action: #selector(Coordinator.handleRefresh), for: UIControl.Event.valueChanged)
-        webViewModel.webView.scrollView.addSubview(refreshControl)
-        webViewModel.webView.scrollView.bounces = true
+        self.webViewModel.webView.scrollView.addSubview(refreshControl)
+        self.webViewModel.webView.scrollView.bounces = true
         
         if let url = URL(string: self.webViewModel.url) {
-            webViewModel.webView.load(URLRequest(url: url))
+            self.webViewModel.webView.load(URLRequest(url: url))
         }
-        return webViewModel.webView
+        return self.webViewModel.webView
     }
     
     func updateUIView(_ webView: WKWebView, context: Context) {
     }
     
-    class Coordinator : NSObject, WKNavigationDelegate {
+    class Coordinator : NSObject, WKNavigationDelegate, WKUIDelegate {
         var parent: WebView
         var refreshcontrol: UIRefreshControl?
         
@@ -56,6 +59,7 @@ struct WebView: UIViewRepresentable {
             //
         }
         
+        // MARK: - WKNavigationDelegate
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             return decisionHandler(.allow)
         }
@@ -76,6 +80,28 @@ struct WebView: UIViewRepresentable {
         
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
             self.refreshcontrol?.endRefreshing()
+        }
+        
+        // MARK: - WKUIDelegate
+        func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+            self.parent.alertViewModel.message = message
+            self.parent.alertViewModel.primaryButton = .default("OK") {
+                completionHandler()
+            }
+            self.parent.alertViewModel.isPresented = true
+            self.parent.alertViewModel.secondaryButton = nil
+        }
+        
+        func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+            debugPrint("alert \(message)")
+            self.parent.alertViewModel.message = message
+            self.parent.alertViewModel.primaryButton = .default("OK") {
+                completionHandler(true)
+            }
+            self.parent.alertViewModel.secondaryButton = .cancel() {
+                completionHandler(false)
+            }
+            self.parent.alertViewModel.isPresented = true
         }
         
         @objc func handleRefresh(refreshcontrol: UIRefreshControl) {
