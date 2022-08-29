@@ -50,6 +50,7 @@ struct WebView: UIViewRepresentable {
     class Coordinator : NSObject, WKNavigationDelegate, WKUIDelegate {
         var parent: WebView
         var refreshcontrol: UIRefreshControl?
+        var popupWebView: WKWebView?
         
         init(_ uiWebView: WebView) {
             self.parent = uiWebView
@@ -104,9 +105,31 @@ struct WebView: UIViewRepresentable {
             self.parent.alertViewModel.isPresented = true
         }
         
+        func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+            return createWebView(webView: webView, frame: UIScreen.main.bounds, configuration: configuration)
+        }
+        
+        func webViewDidClose(_ webView: WKWebView) {
+            if webView == self.popupWebView {
+                webView.removeFromSuperview()
+                self.popupWebView = nil
+            }
+        }
+        
+        // MARK: - self
         @objc func handleRefresh(refreshcontrol: UIRefreshControl) {
             self.parent.webViewModel.webView.reload()
             self.refreshcontrol = refreshcontrol
+        }
+        
+        func createWebView(webView: WKWebView, frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+            self.popupWebView = WKWebView(frame: frame, configuration: configuration)
+            self.popupWebView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            self.popupWebView!.allowsBackForwardNavigationGestures = true
+            self.popupWebView!.navigationDelegate = self
+            self.popupWebView!.uiDelegate = self
+            webView.addSubview(self.popupWebView!)
+            return self.popupWebView!
         }
     }
 }
