@@ -19,6 +19,7 @@
 		3260365028A54C0C00569837 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260364F28A54C0C00569837 /* AppDelegate.swift */; };
 		3260365228A54D9D00569837 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260365128A54D9D00569837 /* WebView.swift */; };
 		3260365428A54DBA00569837 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260365328A54DBA00569837 /* WebViewModel.swift */; };
+		3275C78A28BC876500F7A902 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3275C78928BC876500F7A902 /* SplashView.swift */; };
 		3FD8505AEAD4BE7E6A112067 /* Pods_ios_webviewTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFF601A62A1606AF3B6C4153 /* Pods_ios_webviewTests.framework */; };
 		F0AAC86B188E86BC2928C99A /* Pods_ios_webview.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D3F26AA0A7D498191B0FA0 /* Pods_ios_webview.framework */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		3260365128A54D9D00569837 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		3260365328A54DBA00569837 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
 		3260365828A552E700569837 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3275C78928BC876500F7A902 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		49A410B50F553C5BF974D6DF /* Pods-ios-webviewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-webviewTests.debug.xcconfig"; path = "Target Support Files/Pods-ios-webviewTests/Pods-ios-webviewTests.debug.xcconfig"; sourceTree = "<group>"; };
 		549C7509996BABBB80CA87C8 /* Pods_ios_webview_ios_webviewUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_webview_ios_webviewUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73D3F26AA0A7D498191B0FA0 /* Pods_ios_webview.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_webview.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				3260362728A549CF00569837 /* ContentView.swift */,
+				3275C78928BC876500F7A902 /* SplashView.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				3231866C28A72D6A00229B31 /* AlertViewModel.swift in Sources */,
 				3260365428A54DBA00569837 /* WebViewModel.swift in Sources */,
 				3260362628A549CF00569837 /* WebviewApp.swift in Sources */,
+				3275C78A28BC876500F7A902 /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,11 +11,17 @@ struct ContentView: View {
     @ObservedObject private var webViewModel = WebViewModel()
     @ObservedObject private var alertViewModel = AlertViewModel()
     
+    @State private var isActive: Bool = false
+    
     var body: some View {
         VStack {
             ZStack {
-                WebView(webViewModel: self.webViewModel, alertViewModel: self.alertViewModel)
-                    .ignoresSafeArea()
+                if self.isActive {
+                    WebView(webViewModel: self.webViewModel, alertViewModel: self.alertViewModel)
+                        .ignoresSafeArea()
+                } else {
+                    SplashView(isActive: $isActive)
+                }
             }
         }.alert(isPresented: $alertViewModel.isPresented) {
             Alert(viewModel: self.alertViewModel)
